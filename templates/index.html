@@ -1,0 +1,118 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+        .content-wrapper{
+            display:flex;
+        }
+        .column-100 {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        .column {
+          display: flex;
+          flex-direction: column;
+          width: 20%;
+        }
+        .list {
+          display: flex;
+          flex-direction: column;
+        }
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        li {
+          display: flex;
+        }
+        button {
+          background: none;
+          border: 1px solid grey;
+          margin: 2px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+        button:hover {
+          text-decoration: underline;
+        }
+        .card {
+          border: 1px solid #ccc;
+          border-radius: 2px;
+          padding: 16px;
+          margin: 16px;
+          width: 200px;
+          height: 200px;
+          text-align: center;
+        }
+        img {
+          width: 100px;
+          height: 100px;
+        }
+        </style>
+    </head>
+    <body>
+    <header>
+        <h1>Flask/Pokemon API Example</h1>
+        <p>
+            This is an example of a basic Flask app that utilizes the Pokemon API.
+            The goal of this app is to gain introductory knowledge on how to use Python to build for the web
+            and is not intended to be an advanced demo.
+        </p>
+        <p>To get started, click a button below.</p>
+    </header>
+    <div class="content-wrapper">
+        <div class="column">
+        <ul>
+        {% for poke in pokemon %}
+            <li><button type="button" onclick="getPokemon({{poke}})">{{ poke.name.upper() }}</button></li>
+        {% endfor  %}
+        </ul>
+            </div>
+        <div class="column">
+            <div id="card-wrapper"></div>
+        </div>
+
+    </div>
+
+    <script>
+        function removeExistingCard(){
+            const card = document.getElementsByClassName('card')
+            while(card.length > 0){
+                card[0].parentNode.removeChild(card[0]);
+            }
+        }
+        async function getPokemon(poke) {
+            removeExistingCard();
+
+            const response = await fetch(poke.url);
+            const pokemonDetails = await response.json()
+
+            const cardWrapper = document.getElementById("card-wrapper")
+
+            const card = document.createElement('div');
+            card.className = 'card'
+
+            const name = document.createElement("h1")
+            name.className = "name"
+            name.innerText = pokemonDetails.name;
+            card.appendChild(name);
+
+            const image = document.createElement("img")
+            image.className = "image"
+            image.src = pokemonDetails.sprites.other.dream_world.front_default
+            card.appendChild(image)
+
+            cardWrapper.appendChild(card)
+        }
+
+
+    </script>
+
+    </body>
+</html>
